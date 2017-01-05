@@ -12,7 +12,7 @@ namespace Home.Automation.Services
     {
         public void Configuration(IAppBuilder app)
         {
-            ConfigureAuth(app);
+
         }
     }
 }
