@@ -23,7 +23,7 @@ namespace Home.Automation.Services
             Container container = new Container();
             //TODO: export setting to config
             //mappings
-            container.Register<ISteamService>(() => new SteamService("", ""));
+            container.Register<ISteamService>(() => new SteamService());
             container.RegisterWebApiControllers(GlobalConfiguration.Configuration);
             container.Verify();
             GlobalConfiguration.Configuration.DependencyResolver = new SimpleInjectorWebApiDependencyResolver(container);

@@ -1,0 +1,9 @@
+language: csharp
+solution: Home.Automation.Services.sln
+install:
+  - nuget restore Home.Automation.Services.sln
+  - nuget install NUnit.Console -Version 3.5.0 -OutputDirectory testrunner
+script:
+  - xbuild /p:Configuration=Release Home.Automation.Services.sln
+  - mono ./testrunner/NUnit.ConsoleRunner.3.5.0/tools/nunit3-console.exe ./Home.Automation.Services/Home.Automation.Steam.Tests/bin/Release/Home.Automation.Steam.Tests.dll
+  - mono ./testrunner/NUnit.ConsoleRunner.3.5.0/tools/nunit3-console.exe ./Home.Automation.Services/Home.Automation.Steam.Tests.Integration/bin/Release/Home.Automation.Steam.Tests.Integration.dll

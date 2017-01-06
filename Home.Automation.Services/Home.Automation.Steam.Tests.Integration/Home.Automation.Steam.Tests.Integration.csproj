@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connection\SteamConnectionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -51,6 +52,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Wishlist\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Home.Automation.Steam\Home.Automation.Steam.csproj">
+      <Project>{5F51BEC0-8E6D-422E-BD5E-346D7B748D15}</Project>
+      <Name>Home.Automation.Steam</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

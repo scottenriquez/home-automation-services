@@ -1,4 +1,5 @@
-﻿using Home.Automation.Common.Exceptions;
+﻿using System;
+using Home.Automation.Common.Exceptions;
 using Home.Automation.Steam.Service.Interface;
 using SteamKit2;
 
@@ -39,6 +40,10 @@ namespace Home.Automation.Steam.Service.Implementation
         /// The service account's password
         /// </summary>
         private string _password;
+        /// <summary>
+        /// Whether or not the client is awaiting a callback
+        /// </summary>
+        private bool _isExecutingRequest;
 
         /// <summary>
         /// Steam service constructor method
@@ -47,17 +52,6 @@ namespace Home.Automation.Steam.Service.Implementation
         {
             IsConnected = false;
             IsLoggedOn = false;
-        }
-
-        /// <summary>
-        /// Connect and log into Steam
-        /// </summary>
-        /// <param name="username">Service account username</param>
-        /// <param name="password">Service account password</param>
-        public void Connect(string username, string password)
-        {
-            _username = username;
-            _password = password;
             _steamClient = new SteamClient();
             _callbackManager = new CallbackManager(_steamClient);
             _steamUser = _steamClient.GetHandler<SteamUser>();
@@ -65,6 +59,37 @@ namespace Home.Automation.Steam.Service.Implementation
             _callbackManager.Subscribe<SteamClient.DisconnectedCallback>(OnDisconnected);
             _callbackManager.Subscribe<SteamUser.LoggedOnCallback>(OnLoggedOn);
             _callbackManager.Subscribe<SteamUser.LoggedOffCallback>(OnLoggedOff);
+            _isExecutingRequest = false;
+        }
+
+        /// <summary>
+        /// Connect and log into the Steam network
+        /// </summary>
+        /// <param name="username">Service account username</param>
+        /// <param name="password">Service account password</param>
+        public void Connect(string username, string password)
+        {
+            _username = username;
+            _password = password;
+            _isExecutingRequest = true;
+            _steamClient.Connect();
+            while (_isExecutingRequest)
+            {
+                _callbackManager.RunWaitCallbacks(TimeSpan.FromSeconds(1));
+            }
+        }
+
+        /// <summary>
+        /// Disconnect from the Steam network
+        /// </summary>
+        public void Disconnect()
+        {
+            _isExecutingRequest = true;
+            _steamClient.Disconnect();
+            while (_isExecutingRequest)
+            {
+                _callbackManager.RunWaitCallbacks(TimeSpan.FromSeconds(1));
+            }
         }
 
         /// <summary>
@@ -92,6 +117,7 @@ namespace Home.Automation.Steam.Service.Implementation
         private void OnDisconnected(SteamClient.DisconnectedCallback disconnectedCallback)
         {
             IsConnected = false;
+            _isExecutingRequest = false;
         }
 
         /// <summary>
@@ -105,6 +131,7 @@ namespace Home.Automation.Steam.Service.Implementation
                 throw new ExternalServiceLogOnException(SERVICE_NAME);
             }
             IsLoggedOn = true;
+            _isExecutingRequest = false;
         }
 
         /// <summary>
@@ -114,6 +141,7 @@ namespace Home.Automation.Steam.Service.Implementation
         private void OnLoggedOff(SteamUser.LoggedOffCallback loggedOffCallback)
         {
             IsLoggedOn = false;
+            _isExecutingRequest = false;
         }
     }
 }
