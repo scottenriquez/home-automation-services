@@ -19,14 +19,6 @@ namespace Home.Automation.Steam.Service.Implementation
         public bool IsLoggedOn { get; set; }
 
         /// <summary>
-        /// The name of the service to pass to exception handlers
-        /// </summary>
-        private const string SERVICE_NAME = "Steam";
-        /// <summary>
-        /// The wait interval for Steam callbacks
-        /// </summary>
-        private const int CALLBACK_WAIT_INTERVAL_IN_SECONDS = 1;
-        /// <summary>
         /// The Steam client
         /// </summary>
         private SteamClient _steamClient;
@@ -50,6 +42,31 @@ namespace Home.Automation.Steam.Service.Implementation
         /// Whether or not the client is awaiting a callback
         /// </summary>
         private bool _isExecutingRequest;
+
+        /// <summary>
+        /// The name of the service to pass to exception handlers
+        /// </summary>
+        private const string SERVICE_NAME = "Steam";
+        /// <summary>
+        /// Web API interface name for Steam user endpoints
+        /// </summary>
+        private const string STEAM_USER_WEB_API_INTERFACE = "ISteamUser";
+        /// <summary>
+        /// The wait interval for Steam callbacks
+        /// </summary>
+        private const int CALLBACK_WAIT_INTERVAL_IN_SECONDS = 1;
+        /// <summary>
+        /// The initial index in the Web API response key value pari
+        /// </summary>
+        private const int CHILDREN_WEB_API_INDEX = 0;
+        /// <summary>
+        /// 
+        /// </summary>
+        private const int STEAM_ID_API_RESULT_INDEX = 0;
+        /// <summary>
+        /// 
+        /// </summary>
+        private const int FRIEND_SINCE_API_RESULT_INDEX = 2;
 
         /// <summary>
         /// Steam service constructor method
@@ -112,15 +129,15 @@ namespace Home.Automation.Steam.Service.Implementation
         public IList<SteamFriend> GetFriendList(string apiKey, string steamId)
         {
             IList<SteamFriend> friendList = new List<SteamFriend>();
-            using (dynamic steamUser = WebAPI.GetInterface("ISteamUser", apiKey))
+            using (dynamic steamUser = WebAPI.GetInterface(STEAM_USER_WEB_API_INTERFACE, apiKey))
             {
                 KeyValue apiResponse = steamUser.GetFriendList(steamid: steamId);
-                foreach (KeyValue friend in apiResponse.Children[0].Children)
+                foreach (KeyValue friend in apiResponse.Children[CHILDREN_WEB_API_INDEX].Children)
                 {
                     friendList.Add(new SteamFriend()
                     {
-                        SteamId = friend.Children[0].Value,
-                        FriendSince = friend.Children[2].Value
+                        SteamId = friend.Children[STEAM_ID_API_RESULT_INDEX].Value,
+                        FriendSince = friend.Children[FRIEND_SINCE_API_RESULT_INDEX].Value
                     });
                 }
                 return friendList;
