@@ -2,7 +2,7 @@
 using Home.Automation.Steam.Service.Implementation;
 using NUnit.Framework;
 
-namespace Home.Automation.Steam.Tests.Integration.Connection
+namespace Home.Automation.Tests.Integration.Steam.Connection
 {
     [TestFixture]
     public class SteamConnectionTests
@@ -15,6 +15,13 @@ namespace Home.Automation.Steam.Tests.Integration.Connection
             Assert.That(steamService.IsConnected, Is.EqualTo(true));
             Assert.That(steamService.IsLoggedOn, Is.EqualTo(true));
             steamService.Disconnect();
+        }
+
+        [Test]
+        public static void ShouldGetFriends()
+        {
+            SteamService steamService = new SteamService();
+            steamService.GetFriendsList();
         }
     }
 }

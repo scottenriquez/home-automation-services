@@ -21,6 +21,10 @@ namespace Home.Automation.Steam.Service.Implementation
         /// </summary>
         private const string SERVICE_NAME = "Steam";
         /// <summary>
+        /// The wait interval for Steam callbacks
+        /// </summary>
+        private const int CALLBACK_WAIT_INTERVAL_IN_SECONDS = 1;
+        /// <summary>
         /// The Steam client
         /// </summary>
         private SteamClient _steamClient;
@@ -33,11 +37,11 @@ namespace Home.Automation.Steam.Service.Implementation
         /// </summary>
         private SteamUser _steamUser;
         /// <summary>
-        /// The service account's username
+        /// The account's username
         /// </summary>
         private string _username;
         /// <summary>
-        /// The service account's password
+        /// The account's password
         /// </summary>
         private string _password;
         /// <summary>
@@ -50,45 +54,64 @@ namespace Home.Automation.Steam.Service.Implementation
         /// </summary>
         public SteamService()
         {
-            IsConnected = false;
-            IsLoggedOn = false;
-            _steamClient = new SteamClient();
-            _callbackManager = new CallbackManager(_steamClient);
-            _steamUser = _steamClient.GetHandler<SteamUser>();
-            _callbackManager.Subscribe<SteamClient.ConnectedCallback>(OnConnected);
-            _callbackManager.Subscribe<SteamClient.DisconnectedCallback>(OnDisconnected);
-            _callbackManager.Subscribe<SteamUser.LoggedOnCallback>(OnLoggedOn);
-            _callbackManager.Subscribe<SteamUser.LoggedOffCallback>(OnLoggedOff);
             _isExecutingRequest = false;
         }
 
         /// <summary>
-        /// Connect and log into the Steam network
+        /// Connect and log into the Steam network to perform restricted actions
         /// </summary>
         /// <param name="username">Service account username</param>
         /// <param name="password">Service account password</param>
-        public void Connect(string username, string password)
+        public void LogOn(string username, string password)
         {
-            _username = username;
-            _password = password;
-            _isExecutingRequest = true;
-            _steamClient.Connect();
-            while (_isExecutingRequest)
+            //prevents multiple connection attempts
+            if (!IsConnected)
             {
-                _callbackManager.RunWaitCallbacks(TimeSpan.FromSeconds(1));
+                _username = username;
+                _password = password;
+                _steamClient = new SteamClient();
+                _callbackManager = new CallbackManager(_steamClient);
+                _steamUser = _steamClient.GetHandler<SteamUser>();
+                _callbackManager.Subscribe<SteamClient.ConnectedCallback>(OnConnected);
+                _callbackManager.Subscribe<SteamClient.DisconnectedCallback>(OnDisconnected);
+                _callbackManager.Subscribe<SteamUser.LoggedOnCallback>(OnLoggedOn);
+                _callbackManager.Subscribe<SteamUser.LoggedOffCallback>(OnLoggedOff);
+                _isExecutingRequest = true;
+                _steamClient.Connect();
+                while (_isExecutingRequest)
+                {
+                    _callbackManager.RunWaitCallbacks(TimeSpan.FromSeconds(CALLBACK_WAIT_INTERVAL_IN_SECONDS));
+                }
             }
         }
 
         /// <summary>
-        /// Disconnect from the Steam network
+        /// Disconnect from the Steam network to perform restricted actions
         /// </summary>
-        public void Disconnect()
+        public void LogOff()
         {
-            _isExecutingRequest = true;
-            _steamClient.Disconnect();
-            while (_isExecutingRequest)
+            if (IsConnected)
             {
-                _callbackManager.RunWaitCallbacks(TimeSpan.FromSeconds(1));
+                _isExecutingRequest = true;
+                _steamClient.Disconnect();
+                while (_isExecutingRequest)
+                {
+                    _callbackManager.RunWaitCallbacks(TimeSpan.FromSeconds(CALLBACK_WAIT_INTERVAL_IN_SECONDS));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get the friend list for a Steam user via the Steam Web API (logging on is not required)
+        /// </summary>
+        /// <param name="apiKey">API key for the Steam Web API</param>
+        /// <param name="steamId">Target user's Steam ID</param>
+        public void GetFriendList(string apiKey, string steamId)
+        {
+            using (dynamic steamUser = WebAPI.GetInterface("ISteamUser", apiKey))
+            {
+                var result = steamUser.GetFriendList(steamid: steamId);
+                Console.WriteLine(result);
             }
         }
 
@@ -117,6 +140,7 @@ namespace Home.Automation.Steam.Service.Implementation
         private void OnDisconnected(SteamClient.DisconnectedCallback disconnectedCallback)
         {
             IsConnected = false;
+            IsLoggedOn = false;
             _isExecutingRequest = false;
         }
 
