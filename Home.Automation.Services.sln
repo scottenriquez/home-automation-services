@@ -9,9 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Home.Automation.Steam", "Ho
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Home.Automation.Common", "Home.Automation.Services\Home.Automation.Common\Home.Automation.Common.csproj", "{375B6F7C-8E17-410A-8D41-D2AF07EDA67A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Home.Automation.Tests", "Home.Automation.Tests\Home.Automation.Tests.csproj", "{DA15EE70-14CA-4486-BE83-1384D4A3FC8B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Home.Automation.Tests", "Home.Automation.Services\Home.Automation.Tests\Home.Automation.Tests.csproj", "{DA15EE70-14CA-4486-BE83-1384D4A3FC8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Home.Automation.Tests.Integration", "Home.Automation.Tests.Integration\Home.Automation.Tests.Integration.csproj", "{CAA81B1D-928B-4191-A004-2CDE9988CEC9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Home.Automation.Tests.Integration", "Home.Automation.Services\Home.Automation.Tests.Integration\Home.Automation.Tests.Integration.csproj", "{CAA81B1D-928B-4191-A004-2CDE9988CEC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
