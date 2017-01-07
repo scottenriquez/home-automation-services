@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Home.Automation.Common.Exceptions;
+using Home.Automation.Steam.Model;
 using Home.Automation.Steam.Service.Interface;
 using SteamKit2;
 
@@ -60,8 +62,8 @@ namespace Home.Automation.Steam.Service.Implementation
         /// <summary>
         /// Connect and log into the Steam network to perform restricted actions
         /// </summary>
-        /// <param name="username">Service account username</param>
-        /// <param name="password">Service account password</param>
+        /// <param name="username">Account username</param>
+        /// <param name="password">Account password</param>
         public void LogOn(string username, string password)
         {
             //prevents multiple connection attempts
@@ -90,6 +92,7 @@ namespace Home.Automation.Steam.Service.Implementation
         /// </summary>
         public void LogOff()
         {
+            //prevents multiple disconnection attempts
             if (IsConnected)
             {
                 _isExecutingRequest = true;
@@ -106,12 +109,21 @@ namespace Home.Automation.Steam.Service.Implementation
         /// </summary>
         /// <param name="apiKey">API key for the Steam Web API</param>
         /// <param name="steamId">Target user's Steam ID</param>
-        public void GetFriendList(string apiKey, string steamId)
+        public IList<SteamFriend> GetFriendList(string apiKey, string steamId)
         {
+            IList<SteamFriend> friendList = new List<SteamFriend>();
             using (dynamic steamUser = WebAPI.GetInterface("ISteamUser", apiKey))
             {
-                var result = steamUser.GetFriendList(steamid: steamId);
-                Console.WriteLine(result);
+                KeyValue apiResponse = steamUser.GetFriendList(steamid: steamId);
+                foreach (KeyValue friend in apiResponse.Children[0].Children)
+                {
+                    friendList.Add(new SteamFriend()
+                    {
+                        SteamId = friend.Children[0].Value,
+                        FriendSince = friend.Children[2].Value
+                    });
+                }
+                return friendList;
             }
         }
 
