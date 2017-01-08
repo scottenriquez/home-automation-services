@@ -4,6 +4,7 @@ using Home.Automation.Common.Exceptions;
 using Home.Automation.Steam.Model;
 using Home.Automation.Steam.Service.Interface;
 using SteamKit2;
+using SteamKit2.Unified.Internal;
 
 namespace Home.Automation.Steam.Service.Implementation
 {
@@ -105,7 +106,7 @@ namespace Home.Automation.Steam.Service.Implementation
         }
 
         /// <summary>
-        /// Disconnect from the Steam network to perform restricted actions
+        /// Disconnect from the Steam network
         /// </summary>
         public void LogOff()
         {
@@ -126,12 +127,13 @@ namespace Home.Automation.Steam.Service.Implementation
         /// </summary>
         /// <param name="apiKey">API key for the Steam Web API</param>
         /// <param name="steamId">Target user's Steam ID</param>
+        /// <returns>Friend list for the given Steam ID</returns>
         public IList<SteamFriend> GetFriendList(string apiKey, string steamId)
         {
             IList<SteamFriend> friendList = new List<SteamFriend>();
-            using (dynamic steamUser = WebAPI.GetInterface(STEAM_USER_WEB_API_INTERFACE, apiKey))
+            using (dynamic steamUserApiInterface = WebAPI.GetInterface(STEAM_USER_WEB_API_INTERFACE, apiKey))
             {
-                KeyValue apiResponse = steamUser.GetFriendList(steamid: steamId);
+                KeyValue apiResponse = steamUserApiInterface.GetFriendList(steamid: steamId);
                 foreach (KeyValue friend in apiResponse.Children[CHILDREN_WEB_API_INDEX].Children)
                 {
                     friendList.Add(new SteamFriend()
@@ -142,6 +144,22 @@ namespace Home.Automation.Steam.Service.Implementation
                 }
                 return friendList;
             }
+        }
+
+        /// <summary>
+        /// Get status information for a given Steam user
+        /// </summary>
+        /// <param name="apiKey">API key for the Steam Web API</param>
+        /// <param name="steamId">Target user's Steam ID</param>
+        /// <returns>Status information for the Steam user</returns>
+        public SteamPlayerSummary GetPlayerSummary(string apiKey, string steamId)
+        {
+            using (dynamic steamUserApiInterface = WebAPI.GetInterface(STEAM_USER_WEB_API_INTERFACE, apiKey))
+            {
+                KeyValue apiResponse = steamUserApiInterface.GetPlayerSummaries(steamids: steamId);
+                Console.WriteLine(apiResponse);
+            }
+            return null;
         }
 
         /// <summary>
