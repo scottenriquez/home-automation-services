@@ -13,6 +13,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Home.Automation.Tests", "Ho
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Home.Automation.Tests.Integration", "Home.Automation.Services\Home.Automation.Tests.Integration\Home.Automation.Tests.Integration.csproj", "{CAA81B1D-928B-4191-A004-2CDE9988CEC9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Home.Automation.Philips.Hue", "Home.Automation.Services\Home.Automation.Philips.Hue\Home.Automation.Philips.Hue.csproj", "{9BC7B8AD-4C99-406F-B2D0-C8358FE1DEB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Home.Automation.Tests.Local", "Home.Automation.Services\Home.Automation.Tests.Local\Home.Automation.Tests.Local.csproj", "{561B9118-E48D-4F98-85B6-847F032300E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Home.Automation.Nest", "Home.Automation.Services\Home.Automation.Nest\Home.Automation.Nest.csproj", "{8FE3DAB7-5293-4FE1-BAAF-ECD4FCDC988E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +45,18 @@ Global
 		{CAA81B1D-928B-4191-A004-2CDE9988CEC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAA81B1D-928B-4191-A004-2CDE9988CEC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAA81B1D-928B-4191-A004-2CDE9988CEC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BC7B8AD-4C99-406F-B2D0-C8358FE1DEB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BC7B8AD-4C99-406F-B2D0-C8358FE1DEB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BC7B8AD-4C99-406F-B2D0-C8358FE1DEB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BC7B8AD-4C99-406F-B2D0-C8358FE1DEB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{561B9118-E48D-4F98-85B6-847F032300E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{561B9118-E48D-4F98-85B6-847F032300E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{561B9118-E48D-4F98-85B6-847F032300E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{561B9118-E48D-4F98-85B6-847F032300E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FE3DAB7-5293-4FE1-BAAF-ECD4FCDC988E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FE3DAB7-5293-4FE1-BAAF-ECD4FCDC988E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FE3DAB7-5293-4FE1-BAAF-ECD4FCDC988E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FE3DAB7-5293-4FE1-BAAF-ECD4FCDC988E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,7 +4,6 @@ using Home.Automation.Common.Exceptions;
 using Home.Automation.Steam.Model;
 using Home.Automation.Steam.Service.Interface;
 using SteamKit2;
-using SteamKit2.Unified.Internal;
 
 namespace Home.Automation.Steam.Service.Implementation
 {
