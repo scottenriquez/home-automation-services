@@ -71,6 +71,9 @@
   <ItemGroup>
     <Compile Include="Hue\Lights\HueLightTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpeedTest\Latency\TestLatencyTests.cs" />
+    <Compile Include="SpeedTest\Speed\TestDownloadTests.cs" />
+    <Compile Include="SpeedTest\Speed\TestUploadTests.cs" />
     <Compile Include="Steam\Connection\SteamConnectionTests.cs" />
     <Compile Include="Steam\User\FriendListTests.cs" />
     <Compile Include="Steam\User\PlayerSummaryTests.cs" />
@@ -84,6 +87,10 @@
     <ProjectReference Include="..\Home.Automation.Philips.Hue\Home.Automation.Philips.Hue.csproj">
       <Project>{9BC7B8AD-4C99-406F-B2D0-C8358FE1DEB2}</Project>
       <Name>Home.Automation.Philips.Hue</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Home.Automation.Speedtest\Home.Automation.Speedtest.csproj">
+      <Project>{3D0F9F0F-429B-4624-8AE8-2855FF67E24B}</Project>
+      <Name>Home.Automation.Speedtest</Name>
     </ProjectReference>
     <ProjectReference Include="..\Home.Automation.Steam\Home.Automation.Steam.csproj">
       <Project>{5F51BEC0-8E6D-422E-BD5E-346D7B748D15}</Project>
