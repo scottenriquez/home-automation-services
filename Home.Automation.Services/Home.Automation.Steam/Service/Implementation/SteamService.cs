@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Home.Automation.Common.Exceptions;
+using Home.Automation.Common.Exception;
 using Home.Automation.Steam.Model;
 using Home.Automation.Steam.Service.Interface;
 using SteamKit2;

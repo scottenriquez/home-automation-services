@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Home.Automation.Tests.Local
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Home.Automation.Nest", "Home.Automation.Services\Home.Automation.Nest\Home.Automation.Nest.csproj", "{8FE3DAB7-5293-4FE1-BAAF-ECD4FCDC988E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Home.Automation.Speedtest", "Home.Automation.Services\Home.Automation.Speedtest\Home.Automation.Speedtest.csproj", "{3D0F9F0F-429B-4624-8AE8-2855FF67E24B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{8FE3DAB7-5293-4FE1-BAAF-ECD4FCDC988E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FE3DAB7-5293-4FE1-BAAF-ECD4FCDC988E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FE3DAB7-5293-4FE1-BAAF-ECD4FCDC988E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D0F9F0F-429B-4624-8AE8-2855FF67E24B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D0F9F0F-429B-4624-8AE8-2855FF67E24B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D0F9F0F-429B-4624-8AE8-2855FF67E24B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D0F9F0F-429B-4624-8AE8-2855FF67E24B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
