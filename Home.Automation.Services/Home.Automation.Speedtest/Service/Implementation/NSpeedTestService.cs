@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using Home.Automation.Speedtest.Helper;
 using Home.Automation.Speedtest.Service.Interface;
-using NSpeedTest;
-using NSpeedTest.Models;
+using MSpeedTest;
+using MSpeedTest.Models;
 
 namespace Home.Automation.Speedtest.Service.Implementation
 {
