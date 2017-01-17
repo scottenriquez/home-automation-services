@@ -1,5 +1,5 @@
 ﻿using Home.Automation.Speedtest.Exception;
-using MSpeedTest.Models;
+using NSpeedTest.Models;
 
 namespace Home.Automation.Speedtest.Helper
 {

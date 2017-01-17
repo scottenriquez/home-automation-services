@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using Home.Automation.Speedtest.Helper;
 using Home.Automation.Speedtest.Service.Interface;
-using MSpeedTest;
-using MSpeedTest.Models;
+using NSpeedTest;
+using NSpeedTest.Models;
 
 namespace Home.Automation.Speedtest.Service.Implementation
 {
@@ -22,7 +22,6 @@ namespace Home.Automation.Speedtest.Service.Implementation
 
         public double TestDownloadSpeed()
         {
-            
             return _speedTestClient.TestDownloadSpeed(_nearestServer);
         }
 
