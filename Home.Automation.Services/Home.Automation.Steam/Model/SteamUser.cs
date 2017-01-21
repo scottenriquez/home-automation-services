@@ -1,6 +1,6 @@
 ﻿namespace Home.Automation.Steam.Model
 {
-    public class SteamFriend
+    public class SteamUser
     {
         /// <summary>
         /// Friend's Steam ID

@@ -32,7 +32,7 @@ namespace Home.Automation.Steam.Service.Interface
         /// <param name="apiKey">API key for the Steam Web API</param>
         /// <param name="steamId">Target user's Steam ID</param>
         /// <returns>Friend list for the Steam user</returns>
-        IList<SteamFriend> GetFriendList(string apiKey, string steamId);
+        IList<SteamUser> GetFriendList(string apiKey, string steamId);
 
         /// <summary>
         /// Get status information for a given Steam user

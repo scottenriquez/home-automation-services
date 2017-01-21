@@ -49,8 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helper\Ensure.cs" />
-    <Compile Include="Model\SteamFriend.cs" />
-    <Compile Include="Model\SteamFriendStatus.cs" />
+    <Compile Include="Model\SteamUser.cs" />
     <Compile Include="Model\SteamPlayerSummary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\Implementation\SteamService.cs" />

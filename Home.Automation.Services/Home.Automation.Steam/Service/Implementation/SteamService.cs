@@ -29,7 +29,7 @@ namespace Home.Automation.Steam.Service.Implementation
         /// <summary>
         /// The authenticated Steam user
         /// </summary>
-        private SteamUser _steamUser;
+        private SteamKit2.SteamUser _steamUser;
         /// <summary>
         /// The account's username
         /// </summary>
@@ -58,15 +58,22 @@ namespace Home.Automation.Steam.Service.Implementation
         /// <summary>
         /// The initial index in the Web API response key value pari
         /// </summary>
-        private const int CHILDREN_WEB_API_INDEX = 0;
+        private const int WEB_API_KEY_INDEX = 0;
         /// <summary>
-        /// 
+        /// The index of a friend's Steam ID in the Web API response
         /// </summary>
         private const int STEAM_ID_API_RESULT_INDEX = 0;
         /// <summary>
-        /// 
+        /// The index of a friend's friend since date in the Web API response
         /// </summary>
         private const int FRIEND_SINCE_API_RESULT_INDEX = 2;
+
+        //TODO: update summaries and possibly export to config
+        private const int COMMUNITY_VISIBILITY_API_RESULT_INDEX = 1;
+        private const int PROFILE_STATE_API_RESULT_INDEX = 2;
+        private const int PERSONA_NAME_API_RESULT_INDEX = 3;
+        private const int PERSONA_STATE_API_RESULT_INDEX = 9;
+        private const int REAL_NAME_RESULT_INDEX = 10;
 
         /// <summary>
         /// Steam service constructor method
@@ -90,11 +97,11 @@ namespace Home.Automation.Steam.Service.Implementation
                 _password = password;
                 _steamClient = new SteamClient();
                 _callbackManager = new CallbackManager(_steamClient);
-                _steamUser = _steamClient.GetHandler<SteamUser>();
+                _steamUser = _steamClient.GetHandler<SteamKit2.SteamUser>();
                 _callbackManager.Subscribe<SteamClient.ConnectedCallback>(OnConnected);
                 _callbackManager.Subscribe<SteamClient.DisconnectedCallback>(OnDisconnected);
-                _callbackManager.Subscribe<SteamUser.LoggedOnCallback>(OnLoggedOn);
-                _callbackManager.Subscribe<SteamUser.LoggedOffCallback>(OnLoggedOff);
+                _callbackManager.Subscribe<SteamKit2.SteamUser.LoggedOnCallback>(this.OnLoggedOn);
+                _callbackManager.Subscribe<SteamKit2.SteamUser.LoggedOffCallback>(this.OnLoggedOff);
                 _isExecutingRequest = true;
                 _steamClient.Connect();
                 while (_isExecutingRequest)
@@ -127,15 +134,16 @@ namespace Home.Automation.Steam.Service.Implementation
         /// <param name="apiKey">API key for the Steam Web API</param>
         /// <param name="steamId">Target user's Steam ID</param>
         /// <returns>Friend list for the given Steam ID</returns>
-        public IList<SteamFriend> GetFriendList(string apiKey, string steamId)
+        public IList<Model.SteamUser> GetFriendList(string apiKey, string steamId)
         {
-            IList<SteamFriend> friendList = new List<SteamFriend>();
+            IList<Model.SteamUser> friendList = new List<Model.SteamUser>();
             using (dynamic steamUserApiInterface = WebAPI.GetInterface(STEAM_USER_WEB_API_INTERFACE, apiKey))
             {
+                //TODO: find better way to deserialize response
                 KeyValue apiResponse = steamUserApiInterface.GetFriendList(steamid: steamId);
-                foreach (KeyValue friend in apiResponse.Children[CHILDREN_WEB_API_INDEX].Children)
+                foreach (KeyValue friend in apiResponse.Children[WEB_API_KEY_INDEX].Children)
                 {
-                    friendList.Add(new SteamFriend()
+                    friendList.Add(new Model.SteamUser()
                     {
                         SteamId = friend.Children[STEAM_ID_API_RESULT_INDEX].Value,
                         FriendSince = friend.Children[FRIEND_SINCE_API_RESULT_INDEX].Value
@@ -155,10 +163,18 @@ namespace Home.Automation.Steam.Service.Implementation
         {
             using (dynamic steamUserApiInterface = WebAPI.GetInterface(STEAM_USER_WEB_API_INTERFACE, apiKey))
             {
+                //TODO: find better way to deserialize response
                 KeyValue apiResponse = steamUserApiInterface.GetPlayerSummaries(steamids: steamId);
-                Console.WriteLine(apiResponse);
+                List<KeyValue> attributes = apiResponse.Children[WEB_API_KEY_INDEX].Children[WEB_API_KEY_INDEX].Children[WEB_API_KEY_INDEX].Children;
+                return new SteamPlayerSummary()
+                {
+                    CommunityVisibilityState = Convert.ToInt32(attributes[COMMUNITY_VISIBILITY_API_RESULT_INDEX].Value),
+                    ProfileState = Convert.ToInt32(attributes[PROFILE_STATE_API_RESULT_INDEX].Value),
+                    PersonaName = attributes[PERSONA_NAME_API_RESULT_INDEX].Value,
+                    PersonaState = Convert.ToInt32(attributes[PERSONA_STATE_API_RESULT_INDEX].Value),
+                    RealName = attributes[REAL_NAME_RESULT_INDEX].Value
+                };
             }
-            return null;
         }
 
         /// <summary>
@@ -172,7 +188,7 @@ namespace Home.Automation.Steam.Service.Implementation
                 throw new ExternalServiceConnectionException(SERVICE_NAME);
             }
             IsConnected = true;
-            _steamUser.LogOn(new SteamUser.LogOnDetails
+            _steamUser.LogOn(new SteamKit2.SteamUser.LogOnDetails
             {
                 Username = _username,
                 Password = _password
@@ -194,7 +210,7 @@ namespace Home.Automation.Steam.Service.Implementation
         /// Handler function to be executed when the user logs into the Steam network
         /// </summary>
         /// <param name="loggedOnCallback">The callback result recieved from attempting to log on user to the Steam network</param>
-        private void OnLoggedOn(SteamUser.LoggedOnCallback loggedOnCallback)
+        private void OnLoggedOn(SteamKit2.SteamUser.LoggedOnCallback loggedOnCallback)
         {
             if (loggedOnCallback.Result != EResult.OK)
             {
@@ -208,7 +224,7 @@ namespace Home.Automation.Steam.Service.Implementation
         /// Handler function to be executed when the user logs out of the Steam network
         /// </summary>
         /// <param name="loggedOffCallback">The callback result recieved from attempting to log out user from the Steam network</param>
-        private void OnLoggedOff(SteamUser.LoggedOffCallback loggedOffCallback)
+        private void OnLoggedOff(SteamKit2.SteamUser.LoggedOffCallback loggedOffCallback)
         {
             IsLoggedOn = false;
             _isExecutingRequest = false;
